@@ -7,7 +7,8 @@ export default class QuantityInput {
   constructor(self, decreaseText, increaseText) {
     // Create input
     this.input = document.createElement('input');
-    this.input.value = 1;
+    this.input.value = parseInt(self.getAttribute('data-value')) || 1;
+    this.input.disabled = self.getAttribute('data-disabled') || false;
     this.input.type = 'number';
     this.input.name = 'quantity';
     this.input.pattern = '[0-9]+';
@@ -28,17 +29,21 @@ export default class QuantityInput {
     }
 
     // Create buttons
-    this.subtract = new Button(this.decreaseText, 'sub');
-    this.add = new Button(this.increaseText, 'add');
-
-    // Add functionality to buttons
-    this.subtract.addEventListener('click', () => this.change_quantity(-1));
-    this.add.addEventListener('click', () => this.change_quantity(1));
-
-    // Add input and buttons to wrapper
-    self.appendChild(this.subtract);
-    self.appendChild(this.input);
-    self.appendChild(this.add);
+    if(!self.getAttribute('data-disabled')){
+      this.subtract = new Button(this.decreaseText, 'sub');
+      this.add = new Button(this.increaseText, 'add');
+  
+      // Add functionality to buttons
+      this.subtract.addEventListener('click', () => this.change_quantity(-1));
+      this.add.addEventListener('click', () => this.change_quantity(1));
+      
+      // Add input and buttons to wrapper
+      self.appendChild(this.subtract);
+      self.appendChild(this.input);
+      self.appendChild(this.add);
+    }else{
+      self.appendChild(this.input);
+    }
   }
 
   change_quantity(change) {
